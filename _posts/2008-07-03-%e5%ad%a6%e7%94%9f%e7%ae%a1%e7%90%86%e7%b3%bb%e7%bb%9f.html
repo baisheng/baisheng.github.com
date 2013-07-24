@@ -1,0 +1,320 @@
+---
+layout: post
+title: 学生管理系统
+categories:
+- Other
+tags:
+- Other
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '2'
+  views: '42'
+---
+刚学编程那时候写的“C”例子 _:)
+
+<!--more-->
+<coolcode lang="cpp">
+/**
+ * Bsheng 版权所有 author Bsheng version 1.0 2006 年 5 月 1日
+ * --------------------------------
+ */ 
+#include<stdio.h> 
+#include<string.h> 
+#include<stdlib.h> 
+#define N 100 
+int INDEX[N]; 
+/* 声明结构体变量 */ 
+struct student 
+{ 
+	int id; 
+	char name[20]; 
+	int c; 
+	int html; 
+	int java; 
+	int sql; 
+	int ave; 
+}stu[N]; 
+  
+void add();         // 声明信息添加函数(1)
+void sort(char);    // 声明信息排序函数(2)
+void insert();      // 声明信息插入函数(3)
+int search();       // 声明信息查找函数(4)
+void score_edit();  // 声明信息修改函数(5)
+void del();         // 声明信息删除函数(6)
+void display();     // 声明信息浏览函数(7)
+  
+void page_title(char *menu_item)    // 声明并定义菜单头部
+{ 
+	system("cls"); 
+	printf("\n >>> 学 生 管 理 系 统 <<<\n\n - %s - \n\n",menu_item); 
+} 
+  
+  
+/* (0)main函数开始 */ 
+void main() 
+{ 
+	int i=0; 
+	char ans; 
+	ans='y'; 
+  
+	do{ 
+		page_title("操作选单"); 
+		printf("\n 1.添加学员信息"); 
+		printf("\n 2.插入学员信息"); 
+		printf("\n 3.查找学员信息"); 
+		printf("\n 4.修改学员信息"); 
+		printf("\n 5.删除学员信息"); 
+		printf("\n 6.浏览学员信息"); 
+		printf("\n 0.退出系统\n\n"); 
+		printf(" 输入选项: "); 
+		scanf("%d",&i); 
+	  
+		switch(i) 
+		{ 
+			case 1:add();break;         // 调用添加函数
+			case 2:insert();break;      // 调用插入函数
+			case 3:search();break;      // 调用搜索函数
+			case 4:score_edit();break;  // 调用修改函数
+			case 5:del();break;         // 调用删除函数
+			case 6:display();break;     // 调用浏览函数
+			case 0:exit(0);             // 退出.
+		  
+		} 
+	  
+		printf("\n 请按任意键继续……\n"); 
+		fflush(stdin); 
+		getchar(); 
+		system("cls"); 
+	  
+	}while(i!=7); 
+  
+} 
+/* (1)定义添加函数 */ 
+void add() 
+{ 
+	page_title("添加学员信息"); 
+	  
+	int j,i,sum=0; 
+	char ans; 
+	ans='y'; 
+	j=0; 
+	i=0; 
+	do 
+	{ 
+		printf("\n 请输入学员的信息:\n"); 
+		printf("\n 学号: "); 
+		scanf("%d",&stu[j].id); 
+		fflush(stdin); 
+		printf("\n 姓名: "); 
+		gets(stu[j].name); 
+		fflush(stdin); 
+		printf("\n C语言成绩: "); 
+		scanf("%d",&stu[j].c); 
+		printf("\n Html语言成绩: "); 
+		scanf("%d",&stu[j].html); 
+		printf("\n Java语言成绩: "); 
+		scanf("%d",&stu[j].java); 
+		printf("\n Sqlsever成绩: "); 
+		scanf("%d",&stu[j].sql); 
+		  
+		printf("\n 添加成功！\n"); 
+		printf("\n 请问是否继续(Y/N): "); 
+		fflush(stdin); 
+		ans=getchar(); 
+		j++; 
+	  
+	}while(ans=='Y'||ans=='y'); 
+	  
+		printf("\n 是否浏览全部学员信息?(y or n):"); 
+		fflush(stdin); 
+		ans=getchar(); 
+		fflush(stdin); 
+		if(ans=='Y'||ans=='y') 
+		display(); 
+
+	} 
+  
+/* (2)定义排序函数 */ 
+void sort(char tx) 
+{ 
+	int i,m,p,x,a[N]; 
+	for(i=0;i<N;i++) 
+	{ 
+		switch(tx) 
+		{ 
+			case '1':a[i]=stu[i].id;    break; 
+			case '2':a[i]=stu[i].c;     break; 
+			case '3':a[i]=stu[i].html;  break; 
+			case '4':a[i]=stu[i].java;  break; 
+			case '5':a[i]=stu[i].sql;   break; 
+			case '6':a[i]=stu[i].ave;   break; 
+		} 
+	} 
+  
+	for(i=0;i<N;i++) 
+	{ 
+		x=0; 
+		p=-1; 
+		for(m=0;m<N;m++) 
+		{ 
+			if(a[m]>x) 
+			{ 
+				x=a[m]; 
+				p=m; 
+			} 
+		} 
+  
+		a[p]=-1; 
+		INDEX[i]=p; 
+	} 
+} 
+  
+/* (3)定义插入函数 */ 
+void insert() 
+{ 
+	page_title("插入学员信息"); 
+	struct student insert; 
+	int i,j,n,t=1; 
+	char ans; 
+  
+	ans='y'; 
+	while(ans=='y'||ans=='Y') 
+	{ 
+		printf("\n 请输入学员的信息:\n"); 
+		printf("\n 请输入学号: "); 
+		scanf("%d",&insert.id); 
+		fflush(stdin); 
+		printf("\n 请输入姓名: "); 
+		gets(insert.name); 
+		fflush(stdin); 
+		printf("\n 请输入C语言成绩: "); 
+		scanf("%d",&insert.c); 
+		printf("\n 请输入Html语言成绩: "); 
+		scanf("%d",&insert.html); 
+		printf("\n 请输入Java语言成绩: "); 
+		scanf("%d",&insert.java); 
+		printf("\n 请输入Sqlsever成绩: "); 
+		scanf("%d",&insert.sql); 
+		  
+		i=0; 
+		while(i<N) 
+		{ 
+			if(stu[i].id>insert.id) i++; 
+			break; 
+		} 
+		j=N; 
+		while(j>i) 
+		{ 
+			stu[j]=stu[j-1]; 
+			j--; 
+		} 
+	  
+		stu[i]=insert; 
+		  
+		printf("\n 插入成功！\n"); 
+		break; 
+	  
+		printf("\n 请问是否继续(Y/N): "); 
+		fflush(stdin); 
+		scanf(" %c",&ans); 
+	  
+	} 
+	display(); 
+	  
+} 
+  
+/* (4)定义查找函数 */ 
+int search(void) 
+{ 
+	int t; 
+	struct student search; 
+	printf(" 请输入学生学号:"); 
+	scanf("%d",&search.id); 
+  
+	for(t=0;t<N;t++) 
+	{ 
+			if(stu[t].id==search.id&&stu[t].id!=0) 
+			{ 
+				printf("\n 学号\t姓名\tC语言\tHtml\tJava\tSqlSever\t平均成绩\n"); 
+				printf(" %d\t%s\t%d\t%d\t%d\t%d\t\t%d\n",stu[t].id,stu[t].name,stu[t].c,stu[t].html,stu[t].java,stu[t].sql,stu[t].ave); 
+				return t; 
+			} 
+	} 
+	printf("\n 输入错误或学号不存在.\n"); 
+	return -1; 
+} 
+  
+  
+  
+/* (5)定义修改函数 */ 
+void score_edit(void) 
+{ 
+	int n; 
+	char ans; 
+	ans='y'; 
+	page_title("修改学员成绩"); 
+	
+	while(ans=='y'||ans=='Y') 
+	{ 
+		if((n=search())!=-1) 
+		{ 
+			printf("\n C语言成绩: "); 
+			scanf("%d",&stu[n].c); 
+			printf("\n Html语言成绩: "); 
+			scanf("%d",&stu[n].html); 
+			printf("\n Java语言成绩: "); 
+			scanf("%d",&stu[n].java); 
+			printf("\n Sqlsever成绩: "); 
+			scanf("%d",&stu[n].sql); 
+			printf("\n 修改成功！\n"); 
+		} 
+		printf("\n 请问是否继续(Y/N):\n "); 
+		fflush(stdin); 
+		ans=getchar(); 
+	} 
+  
+  
+} 
+  
+/* (6)定义删除函数 */ 
+  
+void del(void) 
+{ 
+	page_title("注销学生基本信息"); 
+	int n; 
+	if((n=search())!=-1) stu[n].id=0,stu[n].ave=0,stu[n].java=0,stu[n].html=0,stu[n].c=0,stu[n].sql=0; 
+		printf("\n 该学生已注销!\n"); 
+	  
+} 
+  
+  
+/* (7)定义浏览函数 */ 
+void display() 
+{ 
+	int n,x; 
+	char k; 
+	sort('1'); 
+	while(1) 
+	{ 
+		page_title("浏览"); 
+		printf(" \n 按数字键选择排序方式或按 0 返回\n"); 
+		printf("\n ID(1)\tName\tc(2)\tHtml(3)\tJava(4)\tSqlSever(5)\t平均成绩(6)\n"); 
+		  
+		for(n=0;n<N;n++) 
+		{ 
+			if(INDEX[n]!=-1) 
+			{ 
+				x=INDEX[n]; 
+				stu[x].ave=(stu[x].c+stu[x].html+stu[x].java+stu[x].sql)/4; 
+				printf(" %d\t%s\t%d\t%d\t%d\t%d\t\t%d\n",stu[x].id,stu[x].name,stu[x].c,stu[x].html,stu[x].java,stu[x].sql,stu[x].ave); 
+			} 
+		} 
+		k=getchar(); 
+		if(k<'7'&&k>'0') sort(k); 
+		else if(k=='0') break; 
+		else continue; 
+	} 
+}
+</coolcode>
