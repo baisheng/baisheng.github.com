@@ -1,0 +1,47 @@
+---
+layout: post
+title: A request has been denied as a potential CSRF attack
+categories:
+- part
+tags:
+- dwr
+- error
+- javascript
+- tomcat
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '2'
+  views: '265'
+---
+使用 IE Test 测试程序时
+
+tomcat报出A request has been denied as a potential CSRF attack 的错误。
+
+网上搜了一下，解决方法是在web.xml加入以下代码：
+<coolcode lang="xml">
+<init-param>   
+    <param-name>crossDomainSessionSecurity</param-name>   
+    <param-value>false</param-value>   
+</init-param>
+</coolcode>
+
+以上代码，官方文档解释如下：
+
+crossDomainSessionSecurity 开始版本：2.0 
+默认值：true
+描述：设置成false使能够从其他域进行请求。注意，这样做会在安全性上有点冒险，参考一下这篇文章，在没有理解这个后果前不要设置成为false。
+
+因为存在安全性问题（跨域调用），所以最好不要用。
+建议：
+To use this class in your javascript you will need the following script includes:
+
+<coolcode lang="javascript">
+<script type='text/javascript' src='/dwrtest/dwr/interface/service.js'></script>
+<script type='text/javascript' src='/dwrtest/dwr/engine.js'></script>
+</coolcode>
+ In addition there is an optional utility script:
+<coolcode lang="javascript">
+<script type='text/javascript' src='/dwrtest/dwr/util.js'></script>
+</coolcode>

@@ -1,0 +1,27 @@
+---
+layout: post
+title: java 在 Vista 下的时区问题
+categories:
+- part
+tags:
+- JAVA
+- vista
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '2'
+  views: '34'
+---
+今天在编程中发现 java 在 vista 中获取时间出现问题,java 在 vista 下获取的时间为 GMT 时间，但正常使用的应该 GMT + 8 东八区时间.只好用代码做处理解决：
+<coolcode lang="java">
+_jdk1.5_08
+ // 取得默认时区的 Calendar
+ Calendar c = Calendar.getInstance();
+ DateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
+ // 设置时区
+ TimeZone zone = new SimpleTimeZone(28800000, "Asia/Beijing");
+ // TimeZone.setDefault(TimeZone.getTimeZone("GMT+08:00"));
+ df.setTimeZone(zone);
+ df.format(c.getTime());
+</coolcode>
