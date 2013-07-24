@@ -1,0 +1,28 @@
+---
+layout: post
+title: wpMu
+categories:
+- pieces
+tags: []
+status: trash
+type: post
+published: false
+meta:
+  _wp_trash_meta_status: private
+  _wp_trash_meta_time: '1374670122'
+  _wp_trash_meta_comments_status: a:10:{i:143;s:1:"1";i:144;s:1:"1";i:179;s:1:"1";i:289;s:1:"1";i:293;s:1:"1";i:298;s:1:"1";i:299;s:1:"1";i:1747;s:1:"1";i:1767;s:1:"1";i:1768;s:1:"1";}
+---
+　　在对<a href="http://www.wordpress.org/">Wordpress多用户版</a>的多次安装后，终于以失败告终，不过还是不想放弃，只可惜国内我还没发现有朋友安装它，想找个人交流一下都没有:(，安装到第二步总是提示如下：
+<!--more-->
+<blockquote>Second Step
+Now we’re going to create the database tables and fill them with some default data.
+
+WordPress database error: [You have an error in your SQL syntax. Check the manual that corresponds to your MySQL server version for the right syntax to use near '/wpmu_categories ( cat_ID int(4) NOT NULL auto_increment, c]
+CREATE TABLE wp_/wpmu_categories ( cat_ID int(4) NOT NULL auto_increment, cat_name varchar(55) NOT NULL default '', category_nicename varchar(200) NOT NULL default '', category_description text NOT NULL, category_parent int(4) NOT NULL default '0', PRIMARY KEY (cat_ID), UNIQUE KEY cat_name (cat_name), KEY category_nicename (category_nicename) )
+
+WordPress database error: [You have an error in your SQL syntax. Check the manual that corresponds to your MySQL server version for the right syntax to use near '/wpmu_comments ( comment_ID int(11) unsigned NOT NULL auto_in]
+CREATE TABLE wp_/wpmu_comments ( comment_ID int(11) unsigned NOT NULL auto_increment, comment_post_ID int(11) NOT NULL default '0', comment_author tinytext NOT NULL, comment_author_email varchar(100) NOT NULL default '', comment_author_url varchar(200) NOT NULL default '', comment_author_IP varchar(100) NOT NULL default '', comment_date datetime NOT NULL default '0000-00-00 00:00:00', comment_date_gmt datetime NOT NULL default '0000-00-00 00:00:00', comment_content text NOT NULL, comment_karma int(11) NOT NULL default '0', comment_approved enum('0','1','spam') NOT NULL default '1', comment_agent varchar(255) NOT NULL default '', comment_type varchar(20) NOT NULL default '', comment_parent int(11) NOT NULL default '0', user_id int(11) NOT NULL default '0', PRIMARY KEY (comment_ID), KEY comment_approved (comment_approved), KEY comment_post_ID (comment_post_ID) )
+
+more……
+</blockquote>
+　　总是找不到解决的方法，试过多种方法，在官方网站中也看到有些朋友有类似的情况，但没看到谁给一个解决之法，也或许俺的英语实在太烂，无法理解国外文化吧！-_-||真希望有朋友能帮帮我，如果有知道这种情况应该如何解决，请一定给我指点，Thx！

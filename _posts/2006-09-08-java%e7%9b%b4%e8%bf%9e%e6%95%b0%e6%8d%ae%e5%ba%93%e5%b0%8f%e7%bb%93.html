@@ -1,0 +1,103 @@
+---
+layout: post
+title: java直连数据库小结
+categories:
+- pieces
+tags: []
+status: trash
+type: post
+published: false
+meta:
+  _edit_last: '2'
+  views: '16'
+  _wp_trash_meta_status: publish
+  _wp_trash_meta_time: '1374667550'
+---
+Microsoft SQL Server7.0 Driver for JDBC”的驱动包http://www.microsoft.com/china/sql/default.asp
+
+一：取得数据库连接
+1.用DriverManager取数据库连接
+例子
+String className,url,uid,pwd;
+className = "oracle.jdbc.driver.OracleDriver";
+url = "jdbc:oracle:thin:@127.0.0.1:1521:orasvr;
+uid = "system";
+pwd = "manager";
+Class.forName(className);
+Connection cn = DriverManager.getConnection(url,uid,pwd);
+2.通过JNDI取得数据库连接
+用jndi(java的命名和目录服务)方式
+例子
+String jndi = "jdbc/db";
+Context ctx = (Context) new InitialContext().lookup("java:comp/env");
+DataSource ds = (DataSource) ctx.lookup(jndi);
+Connection cn = ds.getConnection();
+二:执行sql语句
+1.用Statement来执行sql语句
+String sql;
+Statement sm = cn.createStatement();
+sm.executeQuery(sql); // 执行数据查询语句（select）
+sm.executeUpdate(sql); // 执行数据更新语句（delete、update、insert、drop等）statement.close();
+2.用PreparedStatement来执行sql语句
+String sql;
+sql = "insert into user (id,name) values (?,?)";
+PreparedStatement ps = cn.prepareStatement(sql);
+ps.setInt(1,xxx);
+ps.setString(2,xxx);
+...
+ResultSet rs = ps.executeQuery(); // 查询
+int c = ps.executeUpdate(); // 更新
+三:处理执行结果
+查询语句，返回记录集ResultSet
+更新语句，返回数字，表示该更新影响的记录数
+ResultSet的方法
+1、next()，将游标往后移动一行，如果成功返回true；否则返回false
+2、getInt("id")或getSting("name")，返回当前游标下某个字段的值
+四:释放连接
+cn.close();
+一般，先关闭ResultSet，然后关闭Statement（或者PreparedStatement）；最后关闭Connection
+
+可滚动、更新的记录集
+1、创建可滚动、更新的Statement
+Statement sm = cn.createStatement(ResultSet.TYPE_SCROLL_ENSITIVE,ResultSet.CONCUR_READ_ONLY);
+该Statement取得的ResultSet就是可滚动的
+2、创建PreparedStatement时指定参数
+PreparedStatemet ps = cn.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+
+ResultSet.absolute(9000);
+批量更新
+1、Statement
+Statement sm = cn.createStatement();
+sm.addBatch(sql1);
+sm.addBatch(sql2);
+...
+sm.executeBatch()
+一个Statement对象，可以执行多个sql语句以后，批量更新。这多个语句可以是delete、update、insert等或兼有
+2、PreparedStatement
+PreparedStatement ps = cn.preparedStatement(sql);
+{
+ps.setXXX(1,xxx);
+...
+ps.addBatch();
+}
+ps.executeBatch();
+一个PreparedStatement，可以把一个sql语句，变换参数多次执行，一次更新。
+
+事务的处理
+1、关闭Connection的自动提交
+cn.setAutoCommit(false);
+2、执行一系列sql语句
+要点：执行每一个新的sql语句前，上一次执行sql语句的Statement（或者PreparedStatemet）必须先close
+Statement sm ;
+sm = cn.createStatement(insert into user...);
+sm.executeUpdate();
+sm.close();
+
+sm = cn.createStatement("insert into corp...);
+sm.executeUpdate();
+sm.close();
+
+3、提交
+cn.commit();
+4、如果发生异常，那么回滚
+cn.rollback();
